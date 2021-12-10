@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,83 +20,92 @@ namespace Helium_Rewards
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (var webClient = new System.Net.WebClient())
-            //using (var webClient = new System.Net.WebClient { Encoding = System.Text.Encoding.UTF8 })
+
+            try
             {
-                webClient.Headers["User-Agent"] = "PostmanRuntime/7.28.4";
-                var json = webClient.DownloadString(textBox1.Text);
-                //var json = webClient.DownloadData(textBox1.Text);
-                // Now parse with JSON.Net
-                // http://jsonviewer.stack.hu/
-                //Console.WriteLine(json); - confirmed the above returns json
+                using (var webClient = new System.Net.WebClient())
+                {
+                    webClient.Headers["User-Agent"] = "PostmanRuntime/7.28.4";
+                    var json = webClient.DownloadString(textBox1.Text);
+                    //var json = webClient.DownloadData(textBox1.Text);
+                    // Now parse with JSON.Net
+                    // http://jsonviewer.stack.hu/
+                    Console.WriteLine(json);                 
+                    var ObjResponse = JsonConvert.DeserializeObject<ResponseObj.Rootobject>(json);
 
-                //ReadJSON.Rootobject record = JsonConvert.DeserializeObject<ReadJSON.Rootobject>(json);
+                    if (ObjResponse != null)
+                    {
+                        Console.WriteLine($"Found {ObjResponse.data.Count()} items");
+                        Console.WriteLine($"Cursor {ObjResponse.cursor}");
 
-                //ReadJSON.Receipt recordReceipt = JsonConvert.DeserializeObject<ReadJSON.Receipt>(json);
+                        //newly created class to store the data i want
+                        var myDataList = new List<MyData>();
 
-                //dynamic obj = Newtonsoft.Json.Linq.JObject.Parse(json);
-                //string results = obj.results;
-                //foreach (string result in results.Split())
-                //{
-                //    Console.WriteLine(result);
-                //}
+                        foreach (var item in ObjResponse.data)
+                        {
+                            Console.Write($"Item {item.type}");
+                         
+                            //seems path only return a single object, if it does just whip the values out into a new object
+                            if (item.path.Length == 1)
+                            {
+                                var newDataItem = new MyData {
+                                    ItemType = item.type,
+                                    Challengee = item.path.FirstOrDefault().challengee,
+                                    ChallengeeLocation = item.path.FirstOrDefault().challengee_location,
+                                    TxPower = item.path.FirstOrDefault().receipt.tx_power,
+                                    Frequency = item.path.FirstOrDefault().receipt.frequency
 
+                                };
+                                myDataList.Add(newDataItem);
+                            }
+                            else
+                            {
+                                var paths = item.path.ToList();
 
+                                foreach (var pathItem in paths)
+                                {
+                                    //Console.Write($"Item {pathItem.challengee}");
+                                    //Console.Write($"Item {pathItem.challengee_location}");
 
-                //Console.WriteLine("JSON details");
-                ////Console.WriteLine(recordReceipt.origin);
-                //Console.WriteLine(recordReceipt.signal);
-                //Console.WriteLine(recordReceipt.snr);
-                //Console.WriteLine(recordReceipt.tx_power);
-                //Console.WriteLine();
+                                    ////get receipt info from pathItem
+                                    //Console.Write($"Item {pathItem.receipt.frequency}");
+                                    //Console.Write($"Item {pathItem.receipt.snr}");
+                                    //Console.Write($"Item {pathItem.receipt.tx_power}");
 
+                                    var newDataItem = new MyData
+                                    {
+                                        ItemType = item.type,
+                                        Challengee = pathItem.challengee,
+                                        ChallengeeLocation = pathItem.challengee_location,
+                                        TxPower = pathItem.receipt.tx_power,
+                                        Frequency = pathItem.receipt.frequency
 
+                                    };
+                                    myDataList.Add(newDataItem);
+                                }
+                            }
+
+                        }
+                            dataGridView1.DataSource = myDataList;
+              
+                    }
+                    else
+                    {
+                        Console.WriteLine("No items returned");
+                    }
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
-        //internal static bool IsValidJson(string data)
-        //{
-        //    data = data.Trim();
-        //    try
-        //    {
-        //        if (data.StartsWith("{") && data.EndsWith("}"))
-        //        {
-        //            Newtonsoft.Json.Linq.JToken.Parse(data);
-        //            Console.WriteLine("jToken - Parsing");
-   
-
-
-        //            Console.WriteLine();
-
-        //        }
-        //        else if (data.StartsWith("[") && data.EndsWith("]"))
-        //        {
-        //            Newtonsoft.Json.Linq.JArray.Parse(data);
-        //            Console.WriteLine("jArray - Parsing");
-        //            Console.WriteLine();
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //        return true;
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //}
-
-
-
-        //static async Task Main(string[] args)
-        //{
-        //    using (var httpClient = new HttpClient())
-        //    {
-        //        var json = await httpClient.GetStringAsync(textBox1.Text);
-        //        // Now parse with JSON.Net
-        //    }
-        //}
+        }
     }
 }

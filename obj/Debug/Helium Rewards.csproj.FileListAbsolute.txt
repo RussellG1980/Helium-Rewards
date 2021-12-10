@@ -1,0 +1,12 @@
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\bin\Debug\Helium Rewards.exe.config
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\bin\Debug\Helium Rewards.exe
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\bin\Debug\Helium Rewards.pdb
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\bin\Debug\Newtonsoft.Json.dll
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\bin\Debug\Newtonsoft.Json.xml
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium_Rewards.Form1.resources
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium_Rewards.Properties.Resources.resources
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium Rewards.csproj.GenerateResource.cache
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium Rewards.csproj.CoreCompileInputs.cache
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium Rewards.csproj.CopyComplete
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium Rewards.exe
+C:\Users\LocalUser\Source\Repos\Helium-Rewards\obj\Debug\Helium Rewards.pdb
